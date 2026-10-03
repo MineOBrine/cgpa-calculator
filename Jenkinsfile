@@ -8,7 +8,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = 'yourdockerhubuser'       // <-- change this
+        DOCKERHUB_USER = 'chinmaysonawane713'       // <-- change this
         IMAGE_NAME     = 'cgpa-calculator'
         IMAGE_TAG      = "${env.BUILD_NUMBER}"
     }
