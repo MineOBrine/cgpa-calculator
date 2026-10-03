@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your SGPA</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap">
+  <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<main class="sheet">
+  <h1>Your SGPA</h1>
+
+  <p class="cgpa"><span th:text="${#numbers.formatDecimal(result.sgpa(), 1, 2)}">9.00</span></p>
+  <p class="lede">This semester, across <span th:text="${#numbers.formatDecimal(result.totalCredits(), 1, 1)}">23.0</span> credits.</p>
+
+  <section class="cgpa-line" th:if="${result.cgpa() != null}">
+    <h2>CGPA</h2>
+    <p class="cgpa-small"><span th:text="${#numbers.formatDecimal(result.cgpa(), 1, 2)}">8.72</span></p>
+    <p class="lede">Across <span th:text="${result.semesterCount()}">2</span> semesters, weighted by credits.</p>
+  </section>
+
+  <section class="semesters" th:if="${!result.previous().isEmpty()}">
+    <h2>Semester-wise SGPA</h2>
+    <table>
+      <thead>
+        <tr><th>Semester</th><th class="num">SGPA</th><th class="num">Credits</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="s, st : ${result.previous()}">
+          <td th:text="'Semester ' + ${st.count}">Semester 1</td>
+          <td class="num" th:text="${#numbers.formatDecimal(s.sgpa(), 1, 2)}">8.75</td>
+          <td class="num" th:text="${#numbers.formatDecimal(s.credits(), 1, 1)}">22.0</td>
+        </tr>
+        <tr class="current">
+          <td th:text="'Semester ' + ${result.previous().size() + 1} + ' (this one)'">Semester 2 (this one)</td>
+          <td class="num" th:text="${#numbers.formatDecimal(result.sgpa(), 1, 2)}">9.00</td>
+          <td class="num" th:text="${#numbers.formatDecimal(result.totalCredits(), 1, 1)}">23.0</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="lede">
+    About <strong th:text="${#numbers.formatDecimal(result.percentage(), 1, 1)} + '%'">85.5%</strong>
+    from your <span th:text="${result.percentageBasis()}">SGPA</span> using the common 9.5 multiplier.
+    Check your university's own conversion rule before quoting it.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Course</th><th class="num">Credits</th><th>Grade</th><th class="num">Points</th><th class="num">Credits × points</th></tr>
+    </thead>
+    <tbody>
+      <tr th:each="r : ${result.rows()}">
+        <td th:text="${r.name()}">Maths</td>
+        <td class="num" th:text="${#numbers.formatDecimal(r.credits(), 1, 1)}">4.0</td>
+        <td th:text="${r.grade()}" th:classappend="${r.grade() == 'F'} ? 'fail'">A</td>
+        <td class="num" th:text="${r.points()}">8</td>
+        <td class="num" th:text="${#numbers.formatDecimal(r.weighted(), 1, 1)}">32.0</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td class="num" th:text="${#numbers.formatDecimal(result.totalCredits(), 1, 1)}">8.0</td>
+        <td></td><td></td>
+        <td class="num" th:text="${#numbers.formatDecimal(result.totalWeighted(), 1, 1)}">68.0</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="actions">
+    <a th:href="@{/}" class="secondary btn">Edit courses</a>
+  </div>
+</main>
+</body>
+</html>

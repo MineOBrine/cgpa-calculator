@@ -1,0 +1,88 @@
+:root {
+  --desk: #e9edf4;
+  --paper: #ffffff;
+  --ink: #16233f;
+  --muted: #5b6a86;
+  --rule: #b9c4d8;
+  --fail: #b3261e;
+  --focus: #2456d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --desk: #0f1626;
+    --paper: #18223a;
+    --ink: #e8edf8;
+    --muted: #9aa8c6;
+    --rule: #34435f;
+    --fail: #ff8a80;
+    --focus: #8fb0ff;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 2rem 1rem;
+  background: var(--desk);
+  color: var(--ink);
+  font: 16px/1.5 Comfortaa, "Segoe UI", system-ui, sans-serif;
+}
+.sheet {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 2.25rem 2.5rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 6px double var(--rule);
+}
+h1 {
+  margin: 0 0 .5rem;
+  font: 700 2rem/1.15 Comfortaa, "Segoe UI", system-ui, sans-serif;
+}
+.lede { color: var(--muted); max-width: 60ch; margin: 0 0 1.5rem; }
+.error {
+  margin: 0 0 1rem; padding: .6rem .8rem;
+  border-left: 4px solid var(--fail); color: var(--fail);
+}
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: .5rem .5rem; text-align: left; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; color: var(--muted); font-size: .9rem; border-bottom: 2px solid var(--ink); }
+.num { text-align: right; }
+tfoot td { font-weight: 700; border-bottom: 0; border-top: 2px solid var(--ink); }
+td.fail { color: var(--fail); font-weight: 700; }
+input, select {
+  width: 100%; padding: .45rem .5rem;
+  font: inherit; color: var(--ink); background: transparent;
+  border: 0; border-bottom: 1px dashed var(--rule); border-radius: 0;
+}
+input[type=number] { text-align: right; max-width: 6rem; margin-left: auto; display: block; }
+select option { color: #16233f; }
+input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+.actions { display: flex; gap: .75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+button, .btn {
+  font: inherit; padding: .6rem 1.1rem; cursor: pointer;
+  border: 1px solid var(--ink); background: transparent; color: var(--ink);
+  border-radius: 3px; text-decoration: none; display: inline-block;
+}
+button.primary { background: var(--ink); color: var(--paper); }
+button.remove { border: 0; color: var(--muted); padding: .3rem .4rem; font-size: .9rem; text-decoration: underline; }
+.cgpa { margin: 1rem 0 .25rem; font: 700 5rem/1 Comfortaa, "Segoe UI", system-ui, sans-serif; }
+@media (max-width: 34rem) {
+  .sheet { padding: 1.25rem 1rem 1.75rem; }
+  th:nth-child(4), td:nth-child(4) { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  button, .btn { transition: background-color .15s; }
+}
+
+h2 { margin: 2rem 0 .5rem; font: 600 1.25rem/1.2 Comfortaa, "Segoe UI", system-ui, sans-serif; }
+h2 .optional { font: 400 .9rem/1 Comfortaa, "Segoe UI", system-ui, sans-serif; color: var(--muted); }
+.actions.inline { margin-top: .75rem; }
+.sem-label { color: var(--muted); white-space: nowrap; }
+.cgpa-line { margin-top: 1.5rem; padding-top: .5rem; border-top: 1px solid var(--rule); }
+.cgpa-line h2 { margin-top: .75rem; }
+.cgpa-small { margin: .25rem 0; font: 700 3rem/1 Comfortaa, "Segoe UI", system-ui, sans-serif; }
+
+.semesters { margin-top: 1.5rem; }
+.semesters tr.current td { font-weight: 700; }

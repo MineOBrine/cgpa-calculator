@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SGPA &amp; CGPA calculator</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap">
+  <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<main class="sheet">
+  <h1>SGPA &amp; CGPA calculator</h1>
+  <p class="lede">Enter this semester's courses to get your SGPA. Add earlier semesters below to get your CGPA too.</p>
+
+  <p class="error" th:if="${error}" th:text="${error}" role="alert"></p>
+
+  <form th:action="@{/calculate}" method="post">
+    <h2>This semester</h2>
+    <table id="courses">
+      <thead>
+        <tr><th>Course</th><th class="num">Credits</th><th>Grade</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr class="row" th:each="c : ${courses}">
+          <td><input type="text" name="name" th:value="${c.name()}" placeholder="Course name" aria-label="Course name"></td>
+          <td class="num"><input type="number" name="credits" min="0.5" step="0.5" th:value="${c.credits()}" required aria-label="Credits"></td>
+          <td>
+            <select name="grade" required aria-label="Grade">
+              <option value="" disabled th:selected="${c.grade().isEmpty()}">Select</option>
+              <option th:each="g : ${grades}" th:value="${g.key}" th:selected="${g.key == c.grade()}" th:text="${g.key} + ' (' + ${g.value} + ')'"></option>
+            </select>
+          </td>
+          <td><button type="button" class="remove" aria-label="Remove course">Remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions inline">
+      <button type="button" id="add" class="secondary">Add course</button>
+    </div>
+
+    <h2>Earlier semesters <span class="optional">(optional, for CGPA)</span></h2>
+    <table id="previous">
+      <thead>
+        <tr><th>Semester</th><th class="num">SGPA</th><th class="num">Total credits</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr class="row" th:each="p, st : ${previous}">
+          <td class="sem-label" th:text="'Semester ' + ${st.count}">Semester 1</td>
+          <td class="num"><input type="number" name="prevSgpa" min="0" max="10" step="0.01" th:value="${p.sgpa()}" placeholder="8.75" aria-label="SGPA"></td>
+          <td class="num"><input type="number" name="prevCredits" min="0.5" step="0.5" th:value="${p.credits()}" placeholder="22" aria-label="Total credits"></td>
+          <td><button type="button" class="remove" aria-label="Remove semester">Remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions inline">
+      <button type="button" id="addPrev" class="secondary">Add earlier semester</button>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="primary">Calculate</button>
+      <a th:href="@{/reset}" class="btn reset">Reset</a>
+    </div>
+  </form>
+</main>
+
+<script>
+  function setup(tableId, buttonId, blankRow) {
+    const body = document.querySelector('#' + tableId + ' tbody');
+    const template = body.querySelector('.row').cloneNode(true);
+
+    function renumber() {
+      body.querySelectorAll('.sem-label').forEach((el, i) => el.textContent = 'Semester ' + (i + 1));
+    }
+
+    document.getElementById(buttonId).addEventListener('click', () => {
+      const row = template.cloneNode(true);
+      blankRow(row);
+      body.appendChild(row);
+      renumber();
+      const first = row.querySelector('input');
+      if (first) first.focus();
+    });
+
+    body.addEventListener('click', e => {
+      if (!e.target.classList.contains('remove')) return;
+      if (body.children.length > 1) {
+        e.target.closest('tr').remove();
+      } else {
+        blankRow(e.target.closest('tr'));
+      }
+      renumber();
+    });
+  }
+
+  setup('courses', 'add', row => {
+    row.querySelector('input[name=name]').value = '';
+    row.querySelector('input[name=credits]').value = '1';
+    row.querySelector('select').selectedIndex = 0;
+  });
+
+  setup('previous', 'addPrev', row => {
+    row.querySelector('input[name=prevSgpa]').value = '';
+    row.querySelector('input[name=prevCredits]').value = '';
+  });
+</script>
+</body>
+</html>
