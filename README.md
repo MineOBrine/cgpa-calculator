@@ -2,7 +2,7 @@
 
 Spring Boot + Thymeleaf, built with Maven. Two pages: input form and result.
 
-Requirements: JDK 17+, Maven 3.9+
+Requirements: JDK 17+, Maven 3.9+, Google Chrome (for the Selenium UI tests in `mvn test`)
 
     mvn test
     mvn spring-boot:run

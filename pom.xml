@@ -34,6 +34,15 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <!-- Browser-driven UI tests. Selenium 4.6+ auto-downloads the matching
+           chromedriver via Selenium Manager, so no separate driver setup is needed -
+           only Google Chrome itself must be installed on the machine running the tests. -->
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>4.25.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
